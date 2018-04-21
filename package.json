@@ -1,12 +1,12 @@
 {
-  "name": "express-typescript-starter",
+  "name": "pp-dlp-api",
   "version": "0.1.0",
-  "description": "A starting point for Node.js express apps with TypeScript",
+  "description": "ProofPoint DLP Scanner service (Typescript)",
   "repository": {
     "type": "git",
     "url": "https://github.com/Microsoft/TypeScript-Node-Starter"
   },
-  "author": "Bowden Kelly",
+  "author": "Ido Z",
   "license": "MIT",
   "scripts": {
     "start": "npm run serve",

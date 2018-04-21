@@ -4,7 +4,7 @@ import {Request, Response, NextFunction} from "express";
 
 // const express = require("express");
 const processTxtFile = require("../services/txt-file-processor");
-const stringScanner = require( "../services/string-scanner");
+const scannerStrategy = require( "../services/scanner-strategy");
 
 const scanFile = (req: Request, res: Response) => {
   const localPath = req.query["localpath"];
@@ -35,7 +35,7 @@ const scanFile = (req: Request, res: Response) => {
 const scanString = (req: Request, res: Response, next: NextFunction) => {
   const input = req.body;
 
-  return stringScanner.runScanner(input)
+  return scannerStrategy.callScanner(input)
     .then((parsedBody: any) => {
       // const parsedScannerResponse = scannerResponseParser.parseScannerResponse(parsedBody);
       return res.status(200).json(parsedBody);

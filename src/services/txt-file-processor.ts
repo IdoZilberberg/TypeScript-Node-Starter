@@ -5,7 +5,7 @@ const fs = require("fs");
 // const randomAccessFile = require('random-access-file');
 const {StringDecoder} = require("string_decoder");
 const decoder = new StringDecoder("utf8");
-const stringScanner = require("./string-scanner");
+const stringScanner = require("./scanner-strategy");
 
 const processTxtFile = (localFilePath: string) => {
 
@@ -34,7 +34,7 @@ const processTxtFile = (localFilePath: string) => {
 
         const bufstr = decoder.write(chunk);
         ++remainingChunks;
-        promises.push(stringScanner.runScanner(bufstr));
+        promises.push(stringScanner.callScanner(bufstr));
       });
       readStream.on("close", () => {
         if (remainingChunks <= 1) {
