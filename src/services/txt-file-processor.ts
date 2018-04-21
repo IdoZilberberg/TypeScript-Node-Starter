@@ -7,7 +7,7 @@ const {StringDecoder} = require("string_decoder");
 const decoder = new StringDecoder("utf8");
 const stringScanner = require("./scanner-strategy");
 
-const processTxtFile = (localFilePath: string) => {
+const processTxtFile = (localFilePath: string, scannerStrategy?: string) => {
 
   if (!localFilePath) {
     throw new Error();
@@ -34,7 +34,7 @@ const processTxtFile = (localFilePath: string) => {
 
         const bufstr = decoder.write(chunk);
         ++remainingChunks;
-        promises.push(stringScanner.callScanner(bufstr));
+        promises.push(stringScanner.callScanner(bufstr, scannerStrategy));
       });
       readStream.on("close", () => {
         if (remainingChunks <= 1) {
@@ -62,4 +62,8 @@ const processTxtFile = (localFilePath: string) => {
   //     logger.info(`Results: ${JSON.stringify(results)}`);
   //     return results[0]; // TODO: Aggregate results
   //   });
+};
+
+module.exports = {
+  processTxtFile: processTxtFile
 };

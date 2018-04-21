@@ -46,4 +46,5 @@ app.listen(app.get("port"), () => {
   logger.info("  Press CTRL-C to stop\n");
 });
 
+export default app;
 

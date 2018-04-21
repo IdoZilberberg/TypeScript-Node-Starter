@@ -1,13 +1,19 @@
 import {constants} from "./constants";
+import {logger} from "../util/logger";
 
 const rp = require("request-promise");
 
-export const callScanner = (input: string) => {
-  switch (constants.scannerStrategy) {
+export const callScanner = (input: string, strategy?: string) => {
+
+  const selectedStrategy = strategy || constants.scannerStrategy;
+
+  switch (selectedStrategy) {
     case "node":
       return callNodeScanner(input);
     // case "elastic":
     //   return callElasticScanner(input);
+    case "mock":
+      return callMockScanner(input);
     default:
       throw new Error(`Unrecognized scanner strategy: ${constants.scannerStrategy}`);
   }
@@ -19,12 +25,20 @@ function callNodeScanner(input: string) {
     uri: `${constants.NODE_SCANNER_URL}`,
     body: input,
     headers: {
-      "content-type": "text/plain"
+      "Content-Type": "text/plain"
     },
     json: true
   };
 
   console.log("Calling scanner");
-  return rp(options);
+  return rp(options)
+    .then((results: any) => {
+      logger.info(`Results: ${results}`);
+    });
+}
+
+// For testing only
+function callMockScanner(input?: string) {
+  return Promise.resolve({name: "SSN", index: 40});
 }
 

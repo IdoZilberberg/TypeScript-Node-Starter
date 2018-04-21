@@ -1,20 +1,24 @@
 // const Request = express.Request;
 const path = require("path");
 import {Request, Response, NextFunction} from "express";
+import {logger} from "../util/logger";
 
 // const express = require("express");
-const processTxtFile = require("../services/txt-file-processor");
-const scannerStrategy = require( "../services/scanner-strategy");
+const processTxtFile = require("../services/txt-file-processor").processTxtFile;
+const scannerStrategy = require("../services/scanner-strategy");
 
 const scanFile = (req: Request, res: Response) => {
   const localPath = req.query["localpath"];
   const gdrivePath = req.query["gdrivepath"];
+  const strategy = req.query("strategy");
+
+  logger.info(`scanFile(): path=${localPath}`);
 
   const extension = path.extname(localPath);
   let func;
   switch (extension) {
     case ".txt":
-      func = processTxtFile.bind(null, localPath);
+      func = processTxtFile.bind(null, localPath, strategy || null);
       break;
     case ".xls": // TODO: Parse it to text, then run txtFileProcessor as in .txt case
     default:
