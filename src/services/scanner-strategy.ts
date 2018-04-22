@@ -34,6 +34,7 @@ function callNodeScanner(input: string) {
   return rp(options)
     .then((results: any) => {
       logger.info(`Results: ${results}`);
+      return results;
     });
 }
 

@@ -2,6 +2,7 @@
 const path = require("path");
 import {Request, Response, NextFunction} from "express";
 import {logger} from "../util/logger";
+import * as _ from "lodash";
 
 // const express = require("express");
 const processTxtFile = require("../services/txt-file-processor").processTxtFile;
@@ -10,7 +11,7 @@ const scannerStrategy = require("../services/scanner-strategy");
 const scanFile = (req: Request, res: Response) => {
   const localPath = req.query["localpath"];
   const gdrivePath = req.query["gdrivepath"];
-  const strategy = req.query("strategy");
+  const strategy = req.query["strategy"];
 
   logger.info(`scanFile(): path=${localPath}`);
 
@@ -27,7 +28,10 @@ const scanFile = (req: Request, res: Response) => {
 
   return func()
     .then((response: Response) => {
-      return res.status(200).json(response);
+      const finalResponse = _.filter(response, item => {
+        return item.length > 0;
+      });
+      return res.status(200).json(finalResponse);
     })
     .catch((err: Error) => res.status(500).send(err.message));
 };
