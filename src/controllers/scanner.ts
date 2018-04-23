@@ -1,4 +1,6 @@
 // const Request = express.Request;
+import {Detection} from "../models/Detection";
+
 const path = require("path");
 import {Request, Response, NextFunction} from "express";
 import {logger} from "../util/logger";
@@ -44,9 +46,10 @@ const scanString = (req: Request, res: Response, next: NextFunction) => {
   const input = req.body;
 
   return scannerStrategy.callScanner(input)
-    .then((parsedBody: any) => {
+    .then((detections: Detection[]) => {
+      const names = _.map(detections, "name");
       // const parsedScannerResponse = scannerResponseParser.parseScannerResponse(parsedBody);
-      return res.status(200).json(parsedBody);
+      return res.status(200).json(names);
     })
     .catch((err: Error) => res.status(500).send(err.message));
 };

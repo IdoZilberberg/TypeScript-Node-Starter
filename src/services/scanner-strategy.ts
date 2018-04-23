@@ -1,9 +1,10 @@
 import {constants} from "./constants";
 import {logger} from "../util/logger";
+import {Detection} from "../models/Detection";
 
 const rp = require("request-promise");
 
-export const callScanner = (input: string, strategy?: string) => {
+export const callScanner = (input: string, strategy?: string): Promise<Detection[]> => {
 
   const selectedStrategy = strategy || constants.scannerStrategy;
 
@@ -34,12 +35,12 @@ function callNodeScanner(input: string) {
   return rp(options)
     .then((results: any) => {
       logger.info(`Results: ${results}`);
-      return results;
+      return <Detection[]>results;
     });
 }
 
 // For testing only
 function callMockScanner(input?: string) {
-  return Promise.resolve({name: "SSN", index: 40});
+  return Promise.resolve([<Detection>{name: "SSN", index: 40}]);
 }
 
